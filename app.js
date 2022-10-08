@@ -1,16 +1,24 @@
-const express=require('express');
-const mysql=require('mysql2');
-var bodyParser=require('body-parser');
-var app=express();
+import {
+    DB_HOST,
+    DB_NAME,
+    DB_PASSWORD,
+    DB_PORT,
+    DB_USER
+} from './config'
 
-const path=require('path');
-const { response } = require('express');
+import {PORT} from './config'
+import { bodyParser } from 'body-parser';
+import { express } from "express";
+import { mysql } from "mysql";
+
+//const path=require('path');
+// const { response } = require('express');
 
 var con=mysql.createConnection({
-    host:'localhost',
-    user:'root',
-    password:'Cami3105+',
-    database:'altotonga'
+    host: DB_HOST,
+    user:DB_USER,
+    password:DB_PASSWORD,
+    database: DB_NAME
 })
 
 // response.sendFile(path.resolve(__dirname,'pagOrder.html'));
@@ -31,9 +39,8 @@ app.post('/addOrder',(req,res)=>{
     let correo=req.body.email
     let producto=req.body.producto
 
-    con.query('INSERT INTO pedido(nombre,correo,producto) VALUES("'+nombre+'","'+correo+'","'+producto+'")',(err,respuesta,fields)=>{
+    con.query('INSERT INTO pedido(nombre,correo,producto) VALUES("'+nombre+'","'+correo+'","'+producto+'")',(respuesta,fields)=>{
 
-        if (err)return console.log("Error",err)
         console.log(nombre,correo,producto)
         
         //return res.sendFile(path.resolve(__dirname,'public/pagOrder.html'));
@@ -49,8 +56,7 @@ app.post('/delOrder',(req,res)=>{
     let nomCustomer=req.body.nomClient;
     let nomProduct=req.body.nomProduct;
 
-    con.query('DELETE FROM pedido WHERE nombre=("'+nomCustomer+'") AND producto=("'+nomProduct+'")',(err,respuesta,field)=>{
-        if(err) return console.log('ERROR:',err)
+    con.query('DELETE FROM pedido WHERE nombre=("'+nomCustomer+'") AND producto=("'+nomProduct+'")',(respuesta,field)=>{
 
         
 
@@ -62,8 +68,7 @@ app.post('/delOrder',(req,res)=>{
 
 app.get('/getOrders',(req,res)=>{
     
-    con.query('SELECT *FROM pedido',(err,respuesta,field)=>{
-        if(err) return console.log('ERROR:',err)
+    con.query('SELECT *FROM pedido',(respuesta,field)=>{
 
         var userHTML=``
         var i=0
@@ -95,8 +100,7 @@ app.post('/upOrder',(req,res)=>{
     let nomPedido=req.body.editProduct
 
 
-    con.query('UPDATE pedido SET producto=("'+nomPedido+'") WHERE nombre=("'+nameUser+'")',(err,respuesta,field)=>{
-        if(err) return console.log('ERROR:',err)
+    con.query('UPDATE pedido SET producto=("'+nomPedido+'") WHERE nombre=("'+nameUser+'")',(respuesta,field)=>{
 
         return res.send(`
         <a href="pagOrder.html">Inicio</a>
@@ -106,6 +110,6 @@ app.post('/upOrder',(req,res)=>{
 })
 
 
-app.listen(5000,()=>{
+app.listen(PORT,()=>{
     console.log("Servidor escuchando en el puerto 5000")
 })
