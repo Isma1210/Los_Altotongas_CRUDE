@@ -4,12 +4,15 @@ import {
     DB_PASSWORD,
     DB_PORT,
     DB_USER
-} from './config'
+} from './config.js'
 
-import {PORT} from './config'
-import { bodyParser } from 'body-parser';
-import { express } from "express";
-import { mysql } from "mysql";
+import {PORT} from './config.js'
+import bodyParser from 'body-parser';
+import express from 'express';
+import mysql from "mysql2";
+
+var app=express()
+
 
 //const path=require('path');
 // const { response } = require('express');
@@ -68,7 +71,7 @@ app.post('/delOrder',(req,res)=>{
 
 app.get('/getOrders',(req,res)=>{
     
-    con.query('SELECT *FROM pedido',(respuesta,field)=>{
+    con.query('SELECT *FROM pedido',(err,respuesta,field)=>{
 
         var userHTML=``
         var i=0
