@@ -11,6 +11,16 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import mysql from "mysql2";
 
+console.log(DB_HOST)
+console.log(DB_NAME)
+console.log(DB_PASSWORD)
+console.log(DB_USER)
+
+
+
+
+
+
 var app=express()
 
 
@@ -72,7 +82,6 @@ app.post('/delOrder',(req,res)=>{
 app.get('/getOrders',(req,res)=>{
     
     con.query('SELECT *FROM pedido',(err,respuesta,field)=>{
-
         var userHTML=``
         var i=0
         console.log(respuesta)
@@ -104,7 +113,7 @@ app.post('/upOrder',(req,res)=>{
 
 
     con.query('UPDATE pedido SET producto=("'+nomPedido+'") WHERE nombre=("'+nameUser+'")',(respuesta,field)=>{
-
+        
         return res.send(`
         <a href="pagOrder.html">Inicio</a>
         <h1>Pedido de ${nameUser} cambiado a: ${nomPedido}</h1>
